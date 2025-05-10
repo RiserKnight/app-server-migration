@@ -17,3 +17,6 @@ Appends doesn't overwrite log files
 Delete exsiting report files
 Try catch better handled for estimator and summary (main block)
 Try catch better handled for estimator and summary (create and write report data)
+run.sh -> variables are named and handled 
+       -> target directory is checked and ensure that it exists
+       -> Resource/lib check and copied 

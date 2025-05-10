@@ -18,24 +18,26 @@ DB_USER="$3"
 DB_PASS="$4"
 RULE_SET="$5"
 
-echo "📦 Starting App Server Migration Tool"
-echo "📁 Source: $SRC_PATH"
-echo "📂 Output: $OUT_PATH"
-echo "🧠 Rules:  $RULE_SET"
+echo "Starting App Server Migration Tool"
+echo "Source: $SRC_PATH"
+echo "Output: $OUT_PATH"
+echo "Rules:  $RULE_SET"
 
+#Ensure Output directory exists
 mkdir -p "$OUT_PATH"
 
+#Check for lib resources if exists copy to target
 if [ -d "src/main/resources/lib" ]; then
-  echo "📁 Copying HTML assets..."
+  echo "Copying HTML assets..."
   cp -r src/main/resources/lib "$OUT_PATH/lib"
 else
-  echo "⚠️  src/main/resources/lib not found. Skipping copy."
+  echo "src/main/resources/lib not found. Skipping copy."
 fi
 
-echo "🚀 Running analysis..."
+echo "Running analysis..."
 java --add-opens java.base/java.util=ALL-UNNAMED \
      --add-opens java.base/java.lang=ALL-UNNAMED \
      -jar target/app-server-migration-1.0.0-SNAPSHOT-jar-with-dependencies.jar \
      "$SRC_PATH" "$OUT_PATH" "$DB_USER" "$DB_PASS" "$RULE_SET"
 
-echo "✅ Done! Report: $OUT_PATH"
+echo "Done! Report: $OUT_PATH"
