@@ -1,0 +1,19 @@
+Earlier Commits
+
+Added 
+weblogic-to-tomee-javarules
+weblogic-to-tomee-mf
+weblogic-to-tomee-mvnrules
+weblogic-to-tomee-properties
+weblogic-to-tomee-recommendation
+weblogic-to-tomee-XML
+
+----------------------------------------------------
+Enhanced Debugging
+Logs to File as well as Stdout
+Log file based on timestamp and inside logs folder so that new log genertaes for each run
+Log include timestamp,thread name, line of code , loglevel
+Appends doesn't overwrite log files
+Delete exsiting report files
+Try catch better handled for estimator and summary (main block)
+Try catch better handled for estimator and summary (create and write report data)
