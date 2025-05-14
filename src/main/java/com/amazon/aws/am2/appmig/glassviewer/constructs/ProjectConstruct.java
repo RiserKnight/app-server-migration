@@ -8,6 +8,7 @@ public class ProjectConstruct {
 	private String name;
 	private int totalFiles;
 	private int totalModifications;
+	private String projectName;
 	/**
 	 * Complexity - Minor, Major, Critical
 	 */
@@ -44,6 +45,13 @@ public class ProjectConstruct {
 
 	public void setComplexity(String complexity) {
 		this.complexity = complexity;
+	}
+	public String getProjectName() {
+    	return projectName;
+	}
+
+	public void setProjectName(String projectName) {
+    	this.projectName = projectName;
 	}
 
 }

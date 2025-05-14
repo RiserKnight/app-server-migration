@@ -31,7 +31,7 @@ public class ProjectEstimator {
      * @param source Project directory which needs to be migrated to target server compatible code
      * @return Returns implementation class of {@code Estimator}
      */
-    public static Estimator getEstimator(String source, String ruleNames) {
+    public static Estimator getEstimator(String source, String ruleNames, String projectName) {
         Estimator estimator = null;
         File dir = new File(source);
         File[] files = dir.listFiles();
@@ -40,7 +40,10 @@ public class ProjectEstimator {
         } else {
             LOGGER.info("Identifying the estimator for the path {}", source);
             try {
-                estimator = findEstimator(dir, ruleNames);
+                estimator = findEstimator(dir, ruleNames, projectName);
+                if (estimator != null) {
+                estimator.setProjectName(projectName); // ✅ Add this line
+            }
             } catch (NoRulesFoundException e) {
                 throw new RuntimeException(e);
             }
@@ -48,7 +51,7 @@ public class ProjectEstimator {
         return estimator;
     }
 
-    private static Estimator findEstimator(File dir, String ruleNames) throws NoRulesFoundException {
+    private static Estimator findEstimator(File dir, String ruleNames, String projectName) throws NoRulesFoundException {
         ProjectType type = ProjectType.UNKNOWN;
         Estimator estimator = null;
         File buildFile = null;
@@ -57,15 +60,15 @@ public class ProjectEstimator {
         File gradleBuildFile = new File(dir, FILE_GRADLE_BUILD);
         if (mavenBuildFile.exists()) {
             type = ProjectType.MVN;
-            estimator = new MvnEstimator(ruleNames);
+            estimator = new MvnEstimator(ruleNames, projectName);
             buildFile = mavenBuildFile;
         } else if (antBuildFile.exists()) {
             type = ProjectType.ANT;
-            estimator = new AntEstimator(ruleNames);
+            estimator = new AntEstimator(ruleNames, projectName);
             buildFile = antBuildFile;
         } else if (gradleBuildFile.exists()) {
             type = ProjectType.GRADLE;
-            estimator = new GradleEstimator(ruleNames);
+            estimator = new GradleEstimator(ruleNames, projectName);
             buildFile = gradleBuildFile;
         }
         LOGGER.info("Identified the project type as {}", type);

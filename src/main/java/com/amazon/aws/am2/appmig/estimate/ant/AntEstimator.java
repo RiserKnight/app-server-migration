@@ -11,8 +11,9 @@ public class AntEstimator extends Estimator {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(AntEstimator.class);
 
-    public AntEstimator(String ruleFiles) throws NoRulesFoundException {
+    public AntEstimator(String ruleFiles,String projectName) throws NoRulesFoundException {
         this.ruleNames = ruleFiles;
+        this.projectName = projectName; 
         loadRules();
     }
 

@@ -18,11 +18,12 @@ import static com.amazon.aws.am2.appmig.glassviewer.db.IAppDiscoveryGraphDB.*;
 public class QueryBuilder {
 
     public static final String Q_MATCH = "FOR i IN %1$s FILTER i._key == '%2$s' RETURN i._id";
-    public static final String Q_MATCH_PARENT_PROJECTS = "FOR proj in %1$s FILTER proj.projectType == '%2$s' AND proj.hasParent == true RETURN {'_id': proj._id, 'parent': proj.parent}";
-    public static final String Q_MATCH_MVN_PROJECT = "FOR proj in %1$s FILTER proj.projectType == 'maven' %2$s RETURN proj._id";
-    public static final String Q_FETCH_ALL_PROJECTS = "FOR proj IN PROJECTS return proj";
-    public static final String Q_FETCH_DEPENDENCIES = "FOR proj in %1$s FILTER proj.projectType == '%2$s' RETURN {'_id': proj._id, 'dependencies': proj.dependencies}";
-    public static final String Q_CREATE_PROJECT = "INSERT { name: '%1$s'} IN '%2$s' RETURN NEW._id";
+    public static final String Q_MATCH_PROJECT = "FOR i IN %1$s FILTER i._key == '%2$s' AND i.projectName == @projectName RETURN i._id";
+    public static final String Q_MATCH_PARENT_PROJECTS = "FOR proj in %1$s FILTER proj.projectType == '%2$s' AND proj.hasParent == true AND proj.projectName == @projectName RETURN {'_id': proj._id, 'parent': proj.parent}";
+    public static final String Q_MATCH_MVN_PROJECT = "FOR proj in %1$s FILTER proj.projectType == 'maven' %2$s AND proj.projectName == @projectName RETURN proj._id";
+    public static final String Q_FETCH_ALL_PROJECTS = "FOR proj IN PROJECTS FILTER proj.projectName == @projectName RETURN proj";
+    public static final String Q_FETCH_DEPENDENCIES = "FOR proj in %1$s FILTER proj.projectType == '%2$s' AND proj.projectName == @projectName RETURN {'_id': proj._id, 'dependencies': proj.dependencies}";
+    public static final String Q_CREATE_PROJECT = "INSERT { name: '%1$s', projectName: @projectName } IN '%2$s' RETURN NEW._id";
     public static final String Q_UPDATE_PROJECT = "UPDATE '%1$s' WITH %2$s IN '%3$s' RETURN NEW._id";
     public static final String Q_UPDATE_PROJECT_ATTRIBUTE = "UPDATE '%1$s' WITH %2$s IN '%3$s' RETURN NEW._id";
     public static final String Q_CREATE_PACKAGE = "INSERT { _key: '%1$s', name: '%2$s', fullPackageName: '%3$s'} IN '%4$s' RETURN NEW._id";
@@ -60,7 +61,7 @@ public class QueryBuilder {
         if (operation == OP.CREATE) {
             query = String.format(Q_CREATE_PROJECT, pc.getName(), PROJECT_COLLECTION);
         } else if (operation == OP.READ) {
-            query = String.format(Q_MATCH, PROJECT_COLLECTION, pc.getName());
+            query = String.format(Q_MATCH_PROJECT, PROJECT_COLLECTION, pc.getName());
         }
         LOGGER.debug("query buildProjectNode is:{}", query);
         return query;

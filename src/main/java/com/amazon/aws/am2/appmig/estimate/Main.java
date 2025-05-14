@@ -94,12 +94,13 @@ public class Main {
         }
     }
     public static void main(String[] args) throws Exception {
-        if (args != null && args.length == 5) {
+        if (args != null && args.length == 6) {
             String source = args[0];
             String target = args[1];
             String user = args[2];
             String password = args[3];
             String ruleNames = args[4];
+            String projectName = args[5];
             //if source parameter starts with config: then source represents configuration file containing repository details of source code
             //if source parameter starts with source: then source represents directory to be analyzed
             if(source.startsWith("config:")) {
@@ -120,13 +121,14 @@ public class Main {
             List<String> ignoreProjectSources = new ArrayList<>(projectSources);
             for (String projSrc : projectSources) {
             	LOGGER.info("Started processing {}", projSrc);
-                Estimator estimator = ProjectEstimator.getEstimator(projSrc, ruleNames);
+                Estimator estimator = ProjectEstimator.getEstimator(projSrc, ruleNames, projectName);
                 if (estimator != null) {
                     // Directly provided the path of the project
                     LOGGER.info("Loaded the estimator for the source {}", projSrc);
                     ignoreProjectSources.remove(projSrc);
                     estimator.setLstProjects(ignoreProjectSources);
                     estimator.setRuleNames(ruleNames);
+                    estimator.setProjectName(projectName);
                     estimator.build(projSrc, target);
                 } else {
                     LOGGER.info("Unable to find any estimator for {}", projSrc);
@@ -138,7 +140,7 @@ public class Main {
             IAppDiscoveryGraphDB db = AppDiscoveryGraphDB.getInstance();
             db.close();
         } else {
-        	LOGGER.error("Invalid input arguments! expected arguments are source directory, target directory, ArangoDB username and password");
+        	LOGGER.error("Invalid input arguments! expected arguments are source directory, target directory, ArangoDB username, password and project name");
         }
     }
 

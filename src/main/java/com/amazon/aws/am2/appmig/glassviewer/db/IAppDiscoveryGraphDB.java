@@ -36,5 +36,7 @@ public interface IAppDiscoveryGraphDB {
 	public void close() throws Exception;
 
 	public List<String> read(String query);
+
+	public void setProjectName(String projectName);
 	
 }

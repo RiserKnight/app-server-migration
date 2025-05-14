@@ -4,6 +4,7 @@ import com.amazon.aws.am2.appmig.glassviewer.constructs.*;
 import com.amazon.aws.am2.appmig.glassviewer.db.AppDiscoveryGraphDB;
 import com.amazon.aws.am2.appmig.glassviewer.db.IAppDiscoveryGraphDB;
 import com.amazon.aws.am2.appmig.glassviewer.db.QueryBuilder;
+import com.amazon.aws.am2.appmig.glassviewer.db.QueryBuilder.OP;
 import com.amazon.aws.am2.appmig.search.ISearch;
 import com.amazon.aws.am2.appmig.search.RegexSearch;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
@@ -272,16 +273,31 @@ public class JavaGlassViewer extends AbstractJavaGlassViewer {
     }
 
     public String storeProject(String projectName) {
-        IAppDiscoveryGraphDB db = AppDiscoveryGraphDB.getInstance();
-        ProjectConstruct pc = new ProjectConstruct();
-        pc.setName(projectName);
-        String readProjectNode = QueryBuilder.buildProjectNode(pc, OP.READ);
-        String projectId = db.exists(readProjectNode);
-        if (projectId == null) {
-            projectId = db.saveNode(QueryBuilder.buildProjectNode(pc, OP.CREATE));
-        }
-        return projectId;
+    IAppDiscoveryGraphDB db = AppDiscoveryGraphDB.getInstance();
+    ProjectConstruct pc = new ProjectConstruct();
+    pc.setName(projectName);
+    String readProjectNode = QueryBuilder.buildProjectNode(pc, OP.READ);
+    String projectId = db.exists(readProjectNode);
+    if (projectId == null) {
+        projectId = db.saveNode(QueryBuilder.buildProjectNode(pc, OP.CREATE));
     }
+    return projectId;
+}
+public String storeProject(String projFolderName, String projectName) {
+    IAppDiscoveryGraphDB db = AppDiscoveryGraphDB.getInstance();
+    db.setProjectName(projectName); // tag DB layer with context
+
+    ProjectConstruct pc = new ProjectConstruct();
+    pc.setName(projFolderName);
+    pc.setProjectName(projectName); // ensure document gets tagged
+
+    String readProjectNode = QueryBuilder.buildProjectNode(pc, OP.READ);
+    String projectId = db.exists(readProjectNode);
+    if (projectId == null) {
+        projectId = db.saveNode(QueryBuilder.buildProjectNode(pc, OP.CREATE));
+    }
+    return projectId;
+}
 
     private String storePackage(String packageName) {
         IAppDiscoveryGraphDB db = AppDiscoveryGraphDB.getInstance();

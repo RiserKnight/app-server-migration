@@ -20,8 +20,9 @@ public class GradleEstimator extends Estimator {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(GradleEstimator.class);
 
-	public GradleEstimator(String ruleFiles) throws NoRulesFoundException {
+	public GradleEstimator(String ruleFiles,String projectName) throws NoRulesFoundException {
 		this.ruleNames = ruleFiles;
+		this.projectName = projectName;
 		loadRules();
 	}
 

@@ -13,7 +13,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class AppDiscoveryGraphDB implements IAppDiscoveryGraphDB {
 
@@ -21,6 +23,7 @@ public class AppDiscoveryGraphDB implements IAppDiscoveryGraphDB {
     static ArangoDatabase db;
     private static String user;
     private static String password;
+    private String projectName;
     final ArangoDB arangoDB;
 
     private static class Holder {
@@ -145,11 +148,19 @@ public class AppDiscoveryGraphDB implements IAppDiscoveryGraphDB {
 	}
 
     @Override
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+
+    @Override
     public String saveNode(String query) {
     	List<String> result = null;
         LOGGER.debug("Query: {}", query);
         try {
-	        ArangoCursor<String> cursor = db.query(query, String.class);
+            Map<String, Object> bindVars = new HashMap<>();
+            bindVars.put("projectName", this.projectName);
+	        ArangoCursor<String> cursor = db.query(query, bindVars, null, String.class);
 	        result = cursor.asListRemaining();
 	        LOGGER.debug("Node {} got saved", result);
         } catch(ArangoDBException exp) {
@@ -175,7 +186,9 @@ public class AppDiscoveryGraphDB implements IAppDiscoveryGraphDB {
     @Override
     public String exists(String query) {
         LOGGER.debug(query);
-        ArangoCursor<String> cursor = db.query(query, String.class);
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("projectName", this.projectName);
+        ArangoCursor<String> cursor = db.query(query, bindVars, null, String.class);
         List<String> result = cursor.asListRemaining();
         return result.isEmpty() ? null : result.get(0);
     }
@@ -183,14 +196,18 @@ public class AppDiscoveryGraphDB implements IAppDiscoveryGraphDB {
     @Override
     public List<String> existsRelation(String query) {
         LOGGER.debug(query);
-        ArangoCursor<String> cursor = db.query(query, String.class);
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("projectName", this.projectName);
+        ArangoCursor<String> cursor = db.query(query, bindVars, null, String.class);
         return cursor.asListRemaining();
     }
 
     @Override
     public List<String> read(String query) {
         LOGGER.debug(query);
-        ArangoCursor<String> cursor = db.query(query, String.class);
+        Map<String, Object> bindVars = new HashMap<>();
+        bindVars.put("projectName", this.projectName);
+        ArangoCursor<String> cursor = db.query(query, bindVars, null, String.class);
         return cursor.asListRemaining();
     }
 

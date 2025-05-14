@@ -19,6 +19,7 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import com.amazon.aws.am2.appmig.constants.IConstants.BFFP;
 import com.amazon.aws.am2.appmig.estimate.ant.AntEstimator;
 import com.amazon.aws.am2.appmig.estimate.gradle.GradleEstimator;
 import com.amazon.aws.am2.appmig.estimate.mvn.MvnEstimator;
@@ -46,8 +47,6 @@ import com.amazon.aws.am2.appmig.glassviewer.db.QueryBuilder;
 import com.amazon.aws.am2.appmig.report.ReportSingletonFactory;
 import com.amazon.aws.am2.appmig.utils.Utility;
 
-import static com.amazon.aws.am2.appmig.constants.IConstants.RULE_TYPE_SQL;
-
 import static com.amazon.aws.am2.appmig.constants.IConstants.*;
 
 /**
@@ -67,6 +66,7 @@ public abstract class Estimator {
     protected String projectId;
     protected List<String> lstProjects;
     protected String ruleNames;
+    protected String projectName;
     protected int totalLOC;
     protected Map<String, IAnalyzer> mapAnalyzer = new HashMap<>();
 
@@ -106,7 +106,7 @@ public abstract class Estimator {
             Path projFolder = path.getFileName();
             proj_folder_name = projFolder.toString();
         }
-        projectId = new JavaGlassViewer().storeProject(proj_folder_name);
+        projectId = new JavaGlassViewer().storeProject(proj_folder_name, projectName);
         StandardReport report = estimate(projectId);
         Optional<String> sqlReport = Optional.empty();
         String sql_report_name = null;
@@ -465,5 +465,7 @@ public abstract class Estimator {
     public void setRuleNames(String ruleNames) {
         this.ruleNames = ruleNames;
     }
-
+    public void setProjectName(String projectName) {
+    this.projectName = projectName;
+}
 }

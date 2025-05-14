@@ -17,11 +17,13 @@ OUT_PATH="$2"
 DB_USER="$3"
 DB_PASS="$4"
 RULE_SET="$5"
+PROJECT_NAME=$6
 
 echo "Starting App Server Migration Tool"
 echo "Source: $SRC_PATH"
 echo "Output: $OUT_PATH"
 echo "Rules:  $RULE_SET"
+echo "Proect Name: $PROJECT_NAME"
 
 #Ensure Output directory exists
 mkdir -p "$OUT_PATH"
@@ -38,6 +40,6 @@ echo "Running analysis..."
 java --add-opens java.base/java.util=ALL-UNNAMED \
      --add-opens java.base/java.lang=ALL-UNNAMED \
      -jar target/app-server-migration-1.0.0-SNAPSHOT-jar-with-dependencies.jar \
-     "$SRC_PATH" "$OUT_PATH" "$DB_USER" "$DB_PASS" "$RULE_SET"
+     "$SRC_PATH" "$OUT_PATH" "$DB_USER" "$DB_PASS" "$RULE_SET" "$PROJECT_NAME"
 
 echo "Done! Report: $OUT_PATH"

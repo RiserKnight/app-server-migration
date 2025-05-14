@@ -13,8 +13,9 @@ public class MvnEstimator extends Estimator {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MvnEstimator.class);
 
-    public MvnEstimator(String ruleFiles) throws NoRulesFoundException {
+    public MvnEstimator(String ruleFiles,String projectName) throws NoRulesFoundException {
     	this.ruleNames = ruleFiles;
+        this.projectName = projectName;
         loadRules();
     }
 
