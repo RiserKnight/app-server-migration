@@ -51,48 +51,6 @@ import static com.amazon.aws.am2.appmig.glassviewer.db.IAppDiscoveryGraphDB.PROJ
 public class Main {
 	
 	private final static Logger LOGGER = LoggerFactory.getLogger(Main.class);
-    static {
-        try {
-            // Create logs directory if it doesn't exist
-            File logsDir = new File("logs");
-            if (!logsDir.exists()) {
-                logsDir.mkdirs();
-            }
-
-            // Generate timestamp for the log file
-            String timestamp = new SimpleDateFormat("yyyy-MM-dd_HH-mm-ss").format(new Date());
-            String logFileName = "logs/app-mig_" + timestamp + ".log";
-
-            // Get the root logger
-            org.apache.log4j.Logger rootLogger = org.apache.log4j.Logger.getRootLogger();
-            
-            // Remove existing appenders
-            rootLogger.removeAllAppenders();
-
-            // Create and configure console appender
-            ConsoleAppender consoleAppender = new ConsoleAppender();
-            consoleAppender.setLayout(new PatternLayout("[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p %c{1}:%L - %m%n"));
-            consoleAppender.activateOptions();
-            rootLogger.addAppender(consoleAppender);
-
-            // Create and configure file appender
-            RollingFileAppender fileAppender = new RollingFileAppender();
-            fileAppender.setFile(logFileName);
-            fileAppender.setLayout(new PatternLayout("[%d{yyyy-MM-dd HH:mm:ss}] [%t] %-5p %c{1}:%L - %m%n"));
-            fileAppender.setAppend(true);
-            fileAppender.activateOptions();
-            rootLogger.addAppender(fileAppender);
-
-            // Set log level
-            rootLogger.setLevel(org.apache.log4j.Level.INFO);
-
-            LOGGER.info("Logging initialized. Log file: {}", logFileName);
-
-        } catch (Exception e) {
-            System.err.println("Error initializing logging: " + e.getMessage());
-            e.printStackTrace();
-        }
-    }
     public static void main(String[] args) throws Exception {
         if (args != null && args.length == 5) {
             String source = args[0];

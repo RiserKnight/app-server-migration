@@ -35,8 +35,10 @@ else
 fi
 
 echo "Running analysis..."
+TIMESTAMP=$(date +%Y-%m-%d_%H_%M_%S)
 java --add-opens java.base/java.util=ALL-UNNAMED \
      --add-opens java.base/java.lang=ALL-UNNAMED \
+     -Dlogfile=logs/app-mig_${TIMESTAMP}.log \
      -jar target/app-server-migration-1.0.0-SNAPSHOT-jar-with-dependencies.jar \
      "$SRC_PATH" "$OUT_PATH" "$DB_USER" "$DB_PASS" "$RULE_SET"
 
