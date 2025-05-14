@@ -26,13 +26,6 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.Date;
-
-import org.apache.log4j.ConsoleAppender;
-import org.apache.log4j.RollingFileAppender;
-import org.apache.log4j.PatternLayout;
-
-import java.text.SimpleDateFormat;
 
 import static com.amazon.aws.am2.appmig.constants.IConstants.*;
 import static com.amazon.aws.am2.appmig.glassviewer.db.IAppDiscoveryGraphDB.PARENT_CHILD_EDGE;
